@@ -1,0 +1,6 @@
+# install latest version of django from https://pypi.org/project/Django/
+# version latest is 3.1.7 but do not want to go past the next level up to introduce possible breaks
+Django>=3.1.7,<3.2.0
+# install the latest version of djangorestframework but not to exceed past a possible breaking version 
+djangorestframework>=3.12.2,<3.20.0
+
