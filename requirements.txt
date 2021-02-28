@@ -6,6 +6,8 @@ Django>=3.0,<4.0
 djangorestframework>=3.12.2,<3.20.0
 # install MySQL driver for Python and sets up api usage
 mysql-connector-python>=8.0,<8.1
+# install mysql client
+mysqlclient>=2,<3
 # install Flask - Web Server Gateway Interface for quick web apps
 Flask>=1.1,<1.2
 # install manage.py
