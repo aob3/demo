@@ -12,10 +12,10 @@ services:
     ports:
       - "3306:3306"
     # set the db to restart on startup
-    restart: always
+    # restart: always
     environment:
       - MYSQL_DATABASE='demodb'
-      - MYSQL_USER='root'
+      - MYSQL_USER='user'
       - MYSQL_PASSWORD='mysql4fun'
       - MYSQL_ROOT_PASSWORD='mysql4fun'
       - MYSQL_HOST=''
@@ -23,6 +23,9 @@ services:
       - ./app:/app
       - ./db:/var/lib/mysql
       
+    expose:
+      - "3306"
+
   # define service web
   web:
     build: .
@@ -37,7 +40,6 @@ services:
     # states the start and image pull order (but will not wait)
     depends_on:
       - db
-  # expose ports to the host
-  expose:
-    - "3306"
-    - "8000"
+    # expose ports to the host
+    expose:
+      - "8000"

@@ -27,7 +27,7 @@ WORKDIR /app
 COPY ./requirements.txt /app/
 
 # uses the requirements file and installs into the docker image using pip3 (did not symlink pip3 to pip)
-RUN pip3 install -r /requirements.txt
+RUN pip3 install -r /app/requirements.txt
 
 # copy the dir on local into the container
 COPY . /app/
