@@ -1,9 +1,18 @@
-version: '3'
+# docker-compse.yml - intializes the containers with instructions
+# defines and runs multi-container Docker applications to run in in an isolated environment
+
+# docker-compose version 3.0, genrally safe - latest version is 3.8
+version: '3.0'
 services:
+  # define service db
   db:
+    # pull and use the mysql container
     image: mysql:8
+    # attach local port 3306 to port 3306 of the container
     ports:
       - "3306:3306"
+    # set the db to restart on startup
+    restart: always
     environment:
       - MYSQL_DATABASE='demodb'
       - MYSQL_USER='root'
@@ -13,17 +22,22 @@ services:
     volumes:
       - ./app:/app
       - ./db:/var/lib/mysql
+      
+  # define service web
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    # runs the python script
+    command: python samp-app.py runserver 0.0.0.0:8000
+    # attach local port 8000 to port 8000 of the container
     ports:
       - "8000:8000"
     volumes:
       - ./app:/app
       - ./db:/var/lib/mysql
+    # states the start and image pull order (but will not wait)
     depends_on:
       - db
-  # expose ports without publishing them to the host
+  # expose ports to the host
   expose:
     - "3306"
     - "8000"

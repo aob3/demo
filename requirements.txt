@@ -1,6 +1,11 @@
-# install latest version of django from https://pypi.org/project/Django/
-# version latest is 3.1.7 but do not want to go past the next level up to introduce possible breaks
-Django>=3.1.7,<3.2.0
-# install the latest version of djangorestframework but not to exceed past a possible breaking version 
+# requirements.txt - defines the python dependencies to be installed by pip
+# from https://pypi.org/
+# install django version that is at least version 3 but less than verison as to avoid introduce possible breaks with releases
+Django>=3.0,<4.0
+# insatll djangorestframework - for django restful html calls install the latest version  but not to exceed past a possible breaking version 
 djangorestframework>=3.12.2,<3.20.0
+# install MySQL driver for Python and sets up api usage
+mysql-connector-python>=8.0,<8.1
+# install Flask - Web Server Gateway Interface for quick web apps
+Flask>=1.1,<1.2
 
