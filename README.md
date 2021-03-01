@@ -1,4 +1,4 @@
-# Poblem solving demo and related files
+# Poblem solving responses: demo and related files
 
 Demo: sample app using containers for django and mysql
 
