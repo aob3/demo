@@ -1,0 +1,1713 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Red Hat - Problem Solving questions - 2/23/2021
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+REMEMBER: There is no correct answer to these questions. 
+
+They are intended to give us insight into your style of problem solving. 
+Feel free to use any resources available to you. If you have any questions, 
+please do not hesitate to reply to this email. If you'd like to proceed, 
+please have them submitted as soon as possible.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Question 1:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+You are assisting a Red Hat Partner with building a solution for their Python-based web application. 
+The web application uses Django for the front-end UI and MySQL for the backend database. 
+The application is currently hosted on virtual machines but they are interested in migrating to containers.
+
+You have been instructed to assist the Partner with understanding the advantages (and disadvantages) 
+of containers compared to their current virtual machine solution. 
+
+They also want you to present a demo of this containerized solution with a sample web application using both Django and MySQL. 
+The web application can be extremely basic and is used for a simple demo of the containerized web application.
+
+Consider the following:
+* What will the container build files for the front-end and back-end images look like? Provide an example of each.
+* How would we ensure the containers run as non-root users? Why is that important?
+* How do we ensure the customer’s data is persistent, backed-up, and restored? Why is that important?
+* What does networking look like in this scenario?
+* How does communication occur between the front and backend services?
+* Will the customer need to make any adjustments to firewall rules?
+* Where will the container images reside and how will the containers access images in a private repository?
+* How can we handle single-points of failure in a containerized environment? Are there any existing tools or software that can help with this?
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Notes on repsonse:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+An image is a read-only template with instructions for creating a Docker container.
+
+Reviewed -  A Cloud Guru - podman lecture - notes from lecture
+
+There's no denying the popularity of containers. They're everywhere now,
+even on the exam. In this lesson,
+we're going to take a high-level look at containers and container management
+using podman and skopeo. 
+
+You get many of the same benefits with both virtualization and containers:
+security, storage, and network isolation.
+Virtualization and containers do have some differences though.
+
+Virtualization uses a hypervisor to provision multiple virtual hardware
+instances, each with its own complete guest operating system all on top of one hardware
+footprint. 
+
+Containers run directly on the host operating system, sharing a kernel and its hardware resources.
+Containers are isolated from each other and the rest of the system.
+They require far fewer resources, including storage.
+And are quick to start and stop.
+
+### more links and notes #############
+https://www.redhat.com/en/topics/containers/containers-vs-vms
+
+https://phoenixnap.com/kb/containers-vs-vms
+
+Which one should I use?
+That depends—do you need a small instance of something that can be moved easily (containers), 
+or do you need a semi-permanent allocation of custom IT resources?
+
+ various IT components and isolate them from the rest of the system. 
+ Their main differences are in terms of scale and portability.
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Containers:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Pros:
+
+Containers can be as small as 10MB and you can easily limit their memory and CPU usage. 
+This makes containers remarkably lightweight and fast to launch as opposed to deploying virtual machines, 
+where the entire operating system needs to be deployed.
+Because of their size, you can quickly scale in and out of containers and add identical containers.
+
+Also, containers are excellent for Continuous Integration and Continuous Deployment (CI/CD) implementation. 
+They foster collaborative development by distributing and merging images among developers.
+
+
+
+Cons:
+
+A container uses the kernel of the host OS and has operating system dependencies. 
+Therefore, containers can differ from the underlying OS by dependency, but not by type. 
+The host’s kernel limits the use of other operating systems.
+
+Containers still do not offer the same security and stability that VMs can. 
+Since they share the host’s kernel, they cannot be as isolated as a virtual machine. 
+Consequently, containers are process-level isolated, and one container can affect others by 
+compromising the stability of the kernel.
+
+Moreover, once a container performs its task, it shuts down, deleting all the data inside of it. 
+If you want the data to remain on the host server, you have to save it using Data Volumes. 
+This requires manual configuration and provisioning on the host.
+
+Containers are suitable if you need to:
+Maximize the number of apps running on a server
+Deploy multiple instances of a single application
+Have a lightweight system that quickly starts
+Develop an application that runs on any underlying infrastructure
+
+
+A container is an environment that runs an application that is not dependent on the operating system. 
+It isolates the app from the host by virtualizing it. This allows users to created multiple workloads on a 
+single OS instance.
+
+The kernel of the host operating system serves the needs of running different functions of an app, 
+separated into containers. Each container runs isolated tasks. It cannot harm the host machine nor come in conflict 
+with other apps running in separate containers.
+
+
+When working inside a container, you can create a template of an environment you need. 
+The container essentially runs a snapshot of the system at a particular time, providing 
+consistency in the behavior of an app.
+
+
+Containers are typically measured by the megabyte. 
+They don’t package anything bigger than an app and all the files necessary to run, 
+and are often used to package single functions that perform specific tasks (known as a microservice). 
+The lightweight nature of containers—and their shared operating system (OS)—makes them very easy to move across multiple environments.
+
+
+Emerging IT practices (cloud-native development, CI/CD, and DevOps) 
+are possible because workloads are broken into the smallest possible 
+serviceable units possible—usually a function or microservice. 
+These small units are best packaged in containers, which allow multiple teams to work on 
+individual parts of an app or service without interrupting or threatening code packaged in other containers.
+
+The small, lightweight nature of containers allows them to be moved easily across bare metal systems as 
+well as public, private, hybrid, and multicloud environments. They’re also the ideal environment to 
+deploy today’s cloud-native apps, which are collections of microservices designed to provide a consistent 
+development and automated  management experience across public, private, hybrid, and multicloud environments. 
+Cloud-native apps help speed up how new apps are built, how existing ones are optimized, how they’re all connected. 
+The caveat is that containers have to be compatible with the underlying OS. 
+Compared to VMs, containers are best used to: 
+
+Build cloud-native apps  (save this for another discussion on cost savings within your current infrastructure)
+Package microservices
+Instill DevOps or CI/CD practices
+Move scalable IT projects across a diverse IT footprint that shares the same OS
+
+
+- can port to developers in a virtualized enviornemtn on their workstation and they can develop on their own local instance 
+before pushing code to the main branch
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+VMs:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Pros:
+utilizing one physical resource to do the job of many. Therefore, you do not have to buy, maintain and store enumerable stacks of servers.
+efficiently manage all the virtual environments with the centralized power of the hypervisor.
+systems are entirely separate from each other meaning you can install multiple system environments.
+
+
+Cons:
+Virtual machines may take up a lot of system resources of the host machine, being many GBs in size. Running a single app on a virtual server means running a copy of an operating system as well as a virtual copy of all the hardware required for the system to run. This quickly adds up to a lot of RAM and CPU cycles.
+
+The process of relocating an app running on a virtual machine can also be complicated as it is always attached to the operating system. Hence, you have to migrate the app as well as the OS with it. Also, when creating a virtual machine, the hypervisor allocates hardware resources dedicated to the VM.
+
+A virtual machine rarely uses all the resources available which can make the planning and distribution difficult. That’s still economical compared to running separate actual computers.
+
+
+
+
+Virtual machines are a better solution if you need to:
+Manage a variety of operating systems
+Manage multiple apps on a single server
+Run an app that requires all the resources and functionalities of an OS
+Ensure full isolation and security
+
+
+
+VMs are typically measured by the gigabyte. They usually contain their own OS, 
+allowing them to perform multiple resource-intensive functions at once. 
+The increased resources available to VMs allow them to abstract, split, duplicate, 
+and emulate entire servers, OSs, desktops, databases, and networks. 
+
+Traditional IT architectures (monolithic and legacy) keep every aspect of a workload in a single large file type 
+that cannot be split up and so needs to be packaged as a whole unit within a larger environment, often a VM. 
+It was once common to build and run an entire app within a VM, though having all the code and dependencies in 
+one place led to oversized VMs that experienced cascading failures and downtime when pushing updates.
+
+
+VMs are capable of running far more operations than a single container, 
+which is why they are the traditional way monolothic workloads have been (and are still today) packaged. 
+But that expanded functionality makes VMs far less portable because of their dependence on the OS, 
+application, and libraries. Compared to containers, 
+VMs are best used to:
+
+House traditional, legacy, and monolothic workloads
+Isolate risky development cycles
+Provision infrastructural resources (such as networks, servers, and data)
+	- would be a good idea to have a data mount for storing your container data
+Run a different OS inside another OS (such as running Unix on Linux)
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##########################
+For this question:  * Where will the container images reside and how will the containers access images in a private repository?
+##########################
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html/managing_containers/finding_running_and_building_containers_with_podman_skopeo_and_buildah
+
+1.6.10.1. Pushing containers to a private registry
+Pushing containers to a private container registry with the buildah command works much the same as pushing containers with the docker command. You need to:
+
+Set up a private registry (OpenShift provides a container registry or you can set up a simple registry with the docker-distribution package, as shown below).
+Create or acquire the container image you want to push.
+Use buildah push to push the image to the registry.
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Demo setup Reference Links
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+###### good samples ######
+
+https://docs.docker.com/compose/django/
+https://github.com/veryacademy/YT-Django-Docker-Compose-Introduction
+https://dev.to/foadmoha/dockerizing-a-django-mysql-project-g4m
+https://github.com/dakrauth/docker-django-mysql
+https://medium.com/@minghz42/docker-setup-for-django-on-mysql-1f063c9d16a0
+https://blog.devartis.com/django-development-environment-with-docker-a-step-by-step-guide-ae234612fa61
+https://dev.to/foadmoha/dockerizing-a-django-mysql-project-g4m
+https://rskupnik.github.io/docker_series_2_connecting_containers
+
+
+# mysql data dump
+https://towardsdatascience.com/how-to-run-mysql-using-docker-ed4cebcd90e4
+
+# stack overflow
+https://stackoverflow.com/questions/60111272/dockerize-a-django-app-with-a-mysql-container
+https://stackoverflow.com/questions/49828134/how-do-i-add-a-table-in-mysql-using-docker-compose
+https://stackoverflow.com/questions/44296536/seeding-a-mysql-db-for-a-dockerized-django-app
+
+
+# building image using buildah
+https://www.richardwalker.dev/django-3-1.html
+https://www.richardwalker.dev/podman-postgres.html
+
+# podman tutorial
+http://cs.potsdam.edu/Classes/405/django/Tutorial.html
+https://docs.djangoproject.com/en/2.2/intro/tutorial01/
+
+# red hat refs:
+https://developers.redhat.com/blog/2019/09/11/develop-with-django-2-and-python-3-in-a-container-with-red-hat-enterprise-linux/
+https://developers.redhat.com/blog/2019/01/15/podman-managing-containers-pods/?intcmp=701f20000012ngPAAQ
+https://www.redhat.com/sysadmin/compose-kubernetes-podman
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/building_running_and_managing_containers/starting-with-containers_building-running-and-managing-containers
+
+
+
+###### references ################################################################
+
+
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/building_running_and_managing_containers/starting-with-containers_building-running-and-managing-containers
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/building_running_and_managing_containers/index
+https://www.richardwalker.dev/django-3-1.html
+https://www.richardwalker.dev/podman-postgres.html
+https://www.digitalocean.com/community/tutorials/how-to-create-a-django-app-and-connect-it-to-a-database
+https://developers.redhat.com/blog/2019/01/15/podman-managing-containers-pods/?intcmp=701f20000012ngPAAQ
+
+https://www.youtube.com/watch?v=ZGPbQh_Fsn8&list=PLlameCF3cMEuYlqwE4xfrkTs63QiyjL7t&index=2
+https://www.youtube.com/watch?v=H3N3-S7s8IY
+
+http://cs.potsdam.edu/Classes/405/django/Tutorial.html
+https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/development_environment
+https://developers.redhat.com/blog/2019/09/11/develop-with-django-2-and-python-3-in-a-container-with-red-hat-enterprise-linux/
+
+
+# a cloud guru:
+https://learn.acloud.guru/course/red-hat-certified-system-administrator-ex200-exam-prep/learn/1f4fccea-4675-4494-affe-cb5bd880b890/ec2e27ef-340c-4b7b-844f-cda32681087b/watch
+
+registry.redhat.io
+registry.connect.redhat.com
+/etc/containers/registries.conf
+
+
+############### container architecture reference ###############
+
+https://docs.docker.com/develop/dev-best-practices/ 
+https://amp.reddit.com/r/docker/comments/gz02pu/mysql8_docker_image_for_production/
+https://vsupalov.com/database-in-docker/
+https://severalnines.com/blog/mysql-docker-building-container-image
+https://severalnines.com/database-blog/mysql-docker-containers-understanding-basics
+https://jgefroh.medium.com/simplify-web-application-deployment-with-docker-compose-194bba8ac5a7
+https://docs.docker.com/get-started/07_multi_container/
+# good commenting
+https://haydenjames.io/how-to-create-optimized-docker-images-for-production/
+
+# docker compose comment
+https://gist.github.com/ju2wheels/1885539d63dbcfb20729
+
+# docker file comment
+https://docs.docker.com/engine/reference/builder/
+
+
+######################################################################################
+######################################################################################
+DEMO SETUP - sampapp with django web front end and mysql db on back end
+
+- This attempt went wonky due to some podman oddities, podman-compose not working as I had expected
+######################################################################################
+######################################################################################
+
+# AWS-EC2-RHEL8-1 
+# Created AWS EC2 RHEL8 instance for creation of container for web app
+# ping 54.89.194.116 
+cd /home/orin/MyDocuments/aob3/education/aws
+chmod 400 ContainWebApp.pem
+ssh -i "ContainWebApp.pem" ec2-user@ec2-54-89-194-116.compute-1.amazonaws.com
+
+
+# AWS-EC2-RHEL8-2
+# opened ports 22, 80, 8000 (for django)
+54.158.216.0 
+ec2-54-158-216-0.compute-1.amazonaws.com
+cd /home/orin/MyDocuments/aob3/education/aws
+chmod 400 ContainWebApp.pem
+ssh -i "ContainWebApp.pem" ec2-user@ec2-54-89-194-116.compute-1.amazonaws.com
+
+
+
+# connect using Moba Xterm from my laptop
+cd /drives/C/Users/orin/My Documents/aob3/education/aws
+chmod 400 SampApp01.pem
+ssh -i "SampApp01.pem" ec2-user@ec2-54-158-216-0.compute-1.amazonaws.com
+
+# gitbash dir - note for future useage
+cd /drives/C/Users/orin/DOCUME~1/aob3/career/red_hat/rh_prob_solve
+
+
+#### setup VM commands ####################################
+sudo su -
+yum update -y
+
+cat /etc/redhat-release
+
+# Red Hat Enterprise Linux release 8.3 (Ootpa)
+# reference: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/building_running_and_managing_containers/index
+
+
+### install needed software to run containers on the vm
+# get the rhel container tools including podman and buildah
+yum module install -y container-tools
+
+# setup podman to run using "docker-like" commands
+yum install -y podman-docker
+yum install slirp4netns podman -y
+yum install git -y
+yum install python3-pip -y
+pip3 --version
+
+# THIS IS GOODNESS:
+# install podman-compose: https://github.com/containers/podman-compose
+pip3 install podman-compose
+
+
+# install mysql client - could probably install this as a sperate continer
+# used for potential testing with mysql db
+yum install mysql -y
+mysql --version
+# mysql  Ver 8.0.21 
+
+python3 --version
+# Python 3.6.8
+
+buildah --version
+# buildah version 1.16.7 
+
+# boolean to run containers with systemd
+setsebool -P container_manage_cgroup on
+
+exit 
+whoami
+
+# test ec2-user running docker as non root user
+docker ps
+# CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
+
+podman ps
+# CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
+
+sudo su - 
+whoami
+# root
+
+echo "user.max_user_namespaces=28633" > /etc/sysctl.d/userns.conf
+sysctl -p /etc/sysctl.d/userns.conf
+# user.max_user_namespaces=28633
+
+cat /etc/subuid
+# ec2-user:100000:65536
+
+id ec2-user
+# uid=1000(ec2-user) gid=1000(ec2-user) groups=1000(ec2-user),4(adm),190(systemd-journal)
+
+# test rootless user
+podman pull registry.access.redhat.com/ubi8/ubi
+# good pull
+
+podman run registry.access.redhat.com/ubi8/ubi cat /etc/os-release
+# REDHAT_SUPPORT_PRODUCT_VERSION="8.3"
+
+docker --version
+# podman version 2.2.1
+
+podman unshare cat /proc/self/uid_map
+
+# returns:
+0       1000          1
+1     100000      65536
+
+# Note:As a non-root container user, container images are stored under your home directory 
+($HOME/.local/share/containers/storage/), instead of /var/lib/containers
+
+########### HOLD setup of mysql local user - tried using with RHEL8-mysql8-image (which has known issues with volume sharing)####
+sudo groupadd mysql -g 27
+sudo useradd -u 27 mysql -g mysql 
+sudo passwd mysql
+# input twice: mysql4fun
+
+# add to groups
+usermod -a -G ec2-user,adm,systemd-journal mysql
+
+# since the container used has root access to mysql, modfiying this (dirty but effective)
+sudo echo -e 'mysql ALL=(ALL)       NOPASSWD: ALL' >> /etc/sudoers ;
+
+# add to group ec2-user adm systemd-journal
+
+# if need to delete user:
+## userdel -r myuser
+
+sudo mkdir -p /mysql/data
+# this user/group owner mimics the shared data dir in the container
+sudo chown -R mysql:root /mysql
+sudo chmod -R 777 /mysql/
+ls -lsd /mysql/data
+
+##################################################################################################################
+
+###  THIS WAS AN ISSUE - not repeating on new AWS vm ##############################################################
+
+# Create / pull containers web application uses Django for the front-end UI and MySQL for the backend database
+# reference: https://developers.redhat.com/blog/2019/09/11/develop-with-django-2-and-python-3-in-a-container-with-red-hat-enterprise-linux/
+
+# Red Hat container for MySQL:
+https://catalog.redhat.com/software/containers/rhel8/mysql-80/5ba0ad4cdd19c70b45cbf48c
+
+podman login registry.redhat.io
+# Username: {REGISTRY-SERVICE-ACCOUNT-USERNAME}
+# Password: {REGISTRY-SERVICE-ACCOUNT-PASSWORD}
+# Login Succeeded!
+
+# pull the image
+podman pull registry.redhat.io/rhel8/mysql-80
+
+podman images
+# review imagae
+
+# docker file
+https://catalog.redhat.com/software/containers/rhel8/mysql-80/5ba0ad4cdd19c70b45cbf48c?container-tabs=dockerfile
+
+# creates a mysql db running in a container:
+
+# FAILS with specifying entry point with -v fo rthis image - MAJOR  BUMMER !!!!!!!!!!! 
+podman run -d --name mysql_database -e MYSQL_USER=mysql -e MYSQL_PASSWORD=mysql4fun -e MYSQL_DATABASE=db -p 3306:3306 rhel8/mysql-80 -v /mysql/data:/var/lib/mysql/data
+
+# this will work but fails on the -v shared entry point
+podman run -d --name mysql_database -e MYSQL_USER=mysql -e MYSQL_PASSWORD=mysql4fun -e MYSQL_DATABASE=db -p 3306:3306 rhel8/mysql-80
+
+### expirmentation ################
+podman exec -it mysql_database /bin/bash
+uid=27(mysql) gid=27(mysql) groups=27(mysql),0(root)
+podman logs mysql_database
+
+
+##########################################################################################################
+issue with container from rhel8-mysql8
+##########################################################################################################
+
+### error starting a container with -v to designate a shared volume #####
+podman logs -f mysql_database
+
+### returns error:
+podman logs -f mysql_database
+/usr/bin/container-entrypoint: line 2: exec: -v: invalid option
+exec: usage: exec [-cl] [-a name] [command [arguments ...]] [redirection ...]
+
+
+https://catalog.redhat.com/software/containers/rhel8/mysql-80/5ba0ad4cdd19c70b45cbf48c?container-tabs=dockerfile
+ 
+# Not using VOLUME statement since it's not working in OpenShift Online:
+# https://github.com/sclorg/httpd-container/issues/30
+# VOLUME ["/var/lib/mysql/data"]
+
+USER 27
+
+ENTRYPOINT ["container-entrypoint"]
+CMD ["run-mysqld"]
+
+# Try w/o : -v /mysql/data:/var/lib/mysql/data 
+podman run -d --name mysql_database -e MYSQL_USER=mysql -e MYSQL_PASSWORD=mysql4fun -e MYSQL_DATABASE=db -p 3306:3306 rhel8/mysql-80
+
+# add manually - NOPE
+podman run --entrypoint "/mysql/data -al /var/lib/mysql/data " mysql_database
+docker run --entrypoint "/mysql/data" mysql_database -al  /var/lib/mysql/data
+docker run -it -v /mysql/data:/var/lib/mysql/data  mysql_database -i
+
+# shared filesystems - perhaps create a docker shared vloume between containers
+https://www.digitalocean.com/community/tutorials/how-to-share-data-between-docker-containers
+
+# setup of db to files:
+https://developer.ibm.com/technologies/databases/tutorials/docker-dev-db/
+
+# Dockerizing a Django + MySQL project  - looking good
+https://dev.to/foadmoha/dockerizing-a-django-mysql-project-g4m
+
+# try this
+https://blog.devartis.com/django-development-environment-with-docker-a-step-by-step-guide-ae234612fa61
+
+# another mysql container: https://phoenixnap.com/kb/mysql-docker-container
+
+podman search mysql
+
+https://hub.docker.com/_/mysql
+docker pull mysql
+# Trying to pull docker.io/library/mysql:latest
+# OS is debian 10 
+# no db setup
+
+# docker run --name mysql_database_2 -v /mysql/data:/var/lib/mysql  -e MYSQL_USER=mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
+podman run --name mysql_database -v /mysql/data:/var/lib/mysql  -e MYSQL_USER=mysql -e MYSQL_ROOT_PASSWORD=mysql4fun -d mysql:latest
+
+# close - leave off -v
+podman run --name mysql_database -e MYSQL_USER=mysql -e MYSQL_ROOT_PASSWORD=mysql4fun -d mysql:latest -v /mysql/data:/var/lib/mysql 
+
+# ok
+podman run --name mysql_database -e MYSQL_USER=mysql -e MYSQL_ROOT_PASSWORD=mysql4fun -d mysql:latest
+
+### search for django container ############################################################################
+
+https://hub.docker.com/_/django
+
+podman search django
+
+############################################################################################################
+############################################################################################################
+
+### going forth would like to setup a private git repo - to add to the demo to show how this woudl work
+###
+# setup connection to github - from laptop ####
+https://github.com/aob3
+logged in as orbishop03
+orin.bishop.pub
+# created private repo - as to follow with Q1 question about string in a private repo
+
+
+# to refesh from repo
+git pull
+
+###############################################
+
+
+###### back to rhel vm ########################
+# make dir for repo
+# as ec2-user
+cd ~
+mkdir sample
+chmod 775 sample
+cd sample
+
+################ github - private repo ################################################
+# download private repo - works with access with https with id / passwd
+# did setup a key file on the git hub end for ssh / not currently loaded on rhel vm
+
+git clone https://github.com/aob3/demo.git
+# login to private repo
+orin.bishop@yahoo.com
+(password)
+
+# work from repo dir
+cd demo
+
+# setup git credentials
+git config user.name "aob"
+git config user.email "orin.bishop@yahoo.com"
+
+# to refesh from repo
+git pull
+
+# to update repo
+git add .
+git commit -m "update all files, demo is ready, docker-compose and add dirs"
+
+# git commit --amend
+# git stash
+git push
+orin.bishop@yahoo.com
+(password)
+##########################################################################################
+
+# reference: https://docs.docker.com/compose/django/
+# https://docs.docker.com/engine/reference/builder/
+
+
+#######################################################
+# created file: Dockerfile
+#######################################################
+
+# docker build file
+# pull python container from hub.docker.com a lightweight version of alpine python
+FROM python:3.7-alpine3.12
+MAINTAINER Orin Bishop
+
+# set python to run in unbuffered mmode - prints directly when running to avoid issues
+ENV PYTHONUNBUFFERED 1
+
+# copy the requirements file from our filesystem into the docker image
+COPY ./requirements.txt /requirements.txt
+
+# takes the requirements file and installs into the docker image using pip
+RUN pip install -r /requirements.txt
+
+# make a dir in the container where the app source code can be stored
+RUN mkdir /app
+
+# set this as the directory to work from
+WORKDIR /app
+
+# copy the app dir on local into the container
+COPY ./app /app
+
+# create generic 'user' to run the container - make sure the container does not run as root for security purposes
+RUN adduser -D user
+
+# switch to user
+USER user
+
+#######################################################
+
+
+
+#######################################################
+# created file: requirements.txt
+#######################################################
+# install latest version of django from https://pypi.org/project/Django/
+# version latest is 3.1.7 but do not want to go past the next level up to introduce possible breaks
+Django>=3.1.7,<3.2.0
+# install the latest version of djangorestframework but not to exceed past a possible breaking version
+djangorestframework>=3.12.2,<3.20.0
+#######################################################
+
+
+# change dir to the sample/samp-app-api dir 
+cd ~/sample/samp-app-api
+pwd
+# returns: /home/ec2-user/sample/samp-app-api
+whoami
+# returns: ec2-user
+
+# create app dir
+mkdir app
+
+# build from the Dockerfile the docker image
+docker build .
+
+########## HIT KNOW ISSUE WITH using "podman build ." and "docker build ."  and "buildah build ."
+Error: most of the Dockerfile works, but it fails at the simple copy
+
+STEP 6: RUN mkdir /app
+STEP 7: WORKDIR /app
+STEP 8: COPY ./app /app
+error building at STEP "COPY ./app /app": error adding sources [/home/ec2-user/sample/samp-app-api/app]: no items matching glob "/home/ec2-user/sample/samp-app-api/app" copied (1 filtered out): no such file or directory
+ERRO exit status 125
+
+Did a search and it matches up with all of these bugs that have been fixed:
+https://github.com/containers/buildah/issues/1546
+https://bugzilla.redhat.com/show_bug.cgi?id=1710008
+https://github.com/containers/buildah/pull/2784
+https://github.com/containers/buildah/issues/2799
+
+#####################
+
+
+########## ISSUE ##########
+
+# had issues with the create user command
+adduser -D user
+
+
+#### basic reference files / incomplete ########################################################################################################
+
+#### setup files
+cd /home/ec2-user
+mkdir sampapp
+chmod 775 sampapp
+ls -lsd sampapp
+
+cd sampapp
+
+### was not able to test this - this will change
+vi Dockerfile
+# contents ##########
+FROM python:3.8
+ENV PYTHONUNBUFFERED 1
+WORKDIR /app
+COPY requirements.txt /app/requirements.txt
+RUN pip install -r requirements.txt
+COPY . /app
+#####################
+
+### was not able to test this - this will change
+vi docker-compose.yml
+# contents ###########
+version: '3'
+services:
+  db:
+    image: mysql:8
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE='mydatabase'
+      - MYSQL_USER='root'
+      - MYSQL_PASSWORD='mysql4fun'
+      - MYSQL_ROOT_PASSWORD='mysql4fun'
+      - MYSQL_HOST=''
+    volumes:
+      - /tmp/app/mysqld:/var/run/mysqld
+      - ./db:/var/lib/mysql
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - /tmp/app/mysqld:/run/mysqld
+    depends_on:
+      - db
+############################################################################################################
+############################################################################################################
+
+
+
+
+
+
+
+############################################################################################################
+############################################################################################################
+############################################################################################################
+cutting losses with podman / podman-compose
+setup a new AWS-EC2-AMI
+############################################################################################################
+############################################################################################################
+############################################################################################################
+
+
+cd /home/orin/MyDocuments/aob3/education/aws
+# SampApp05
+	ssh -i "SampApp01.pem" ec2-user@ec2-44-192-80-47.compute-1.amazonaws.com
+	- trying now
+	- this is good for django dev env:
+		https://devopsmyway.com/install-django-on-aws-ec2/
+	- ready to start dev	
+
+# Reference:
+https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html
+
+#### setup VM commands ####################################
+sudo su -
+yum update -y
+
+# setup required software
+yum install git -y
+
+# more dependencies
+yum install -y gcc openssl-devel bzip2-devel libffi-devel
+
+################################################################################################
+# try change for ec2-ami to use: https://devopsmyway.com/install-django-on-aws-ec2/
+################################################################################################
+
+sudo amazon-linux-extras install epel -y
+sudo yum install python3-pip -y
+pip3 install django
+pip3 freeze
+
+sudo pip3 install virtualenv
+whereis virtualenv
+cd ~
+virtualenv djangoenv
+# OR /usr/local/bin/virtualenv djangoenv
+
+# creates env in: ~/djangoenv/ .
+source ~/djangoenv/bin/activate
+pip3 install --upgrade Django==2.*
+python -m django --version
+
+# to exit env
+deactivate
+
+
+# create second env - for dev
+source ~/djangoenv2/bin/activate
+pip3 install --upgrade Django
+python -m django --version
+# to exit
+deactivate
+
+# this seems to work
+
+################################################################################################
+################################################################################################
+
+
+
+################################################################################################
+HOLD 
+################################################################################################
+python --version
+# retuns: Python 2.7.18
+
+python3 --version
+# returns: error
+
+# install python 3.8
+which amazon-linux-extras
+amazon-linux-extras | grep -i python
+amazon-linux-extras enable python3.8
+amazon-linux-extras install python3.8 -y
+# or 
+# yum install python3.8 -y
+
+python -V
+# returns: Python 2.7.18
+
+which python
+# returns: /usr/bin/python
+
+type -a python
+ls -la /usr/bin/python*
+
+# for users: root and ec2-user
+#set in ~/.bashrc
+
+alias python3.7=python3.8
+alias python3=python3.8
+alias python=python3
+alias pip=pip3
+
+export PYTHONPATH=/usr/local/bin/python3.8
+export PATH=$PYTHONPATH:/usr/bin/python3.8:/usr/local/bin:$PATH
+
+
+################################################################################################
+################################################################################################
+
+# install python pip3
+yum install python3-pip -y
+pip3 --version
+
+
+#############################################
+
+
+# install mysql client - could probably install this as a sperate continer
+# used for potential testing with mysql db
+yum install mysql -y
+mysql --version
+# mysql  Ver 8.0.21 
+
+sudo amazon-linux-extras install docker -y
+
+# yum install docker -y
+
+# setup user to run docker - will need to exit and log back in
+sudo usermod -a -G docker ec2-user
+
+# back as ec2-user
+
+sudo systemctl enable docker
+sudo systemctl start docker
+
+# docker-compose setup
+sudo curl -L "https://github.com/docker/compose/releases/download/1.28.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+# set perms for all to use
+sudo chmod +x /usr/local/bin/docker-compose
+
+# log off for docker group changes to take effective
+
+# log back on
+# as ec2-user
+whoami
+# ec2-user
+
+docker --version
+
+# test ec2-user running docker as non root user
+docker ps
+# CONTAINER ID  IMAGE   COMMAND  CREATED  STATUS  PORTS   NAMES
+
+docker-compose --version
+###### docker commands reference ##############
+
+# list running containers
+docker ps
+# list images
+docker ps -a
+
+docker volume ls
+docker network ls
+
+# view logs for a contianers
+docker logs <container_name>
+
+# log into a container
+docker exec -it <container_name> bash
+
+# removes 
+docker rm <container_name>
+docker rm -v <container_name>
+docker rmi -f <image_name>
+
+# hard removal of all docker items, volumes, networks, etc
+docker system prune
+docker system prune -a
+
+docker image prune <image_name>
+ 
+####################################################
+
+################ github - private repo ################################################
+# download private repo - works with access with https with id / passwd
+# did setup a key file on the git hub end for ssh / not currently loaded on rhel vm
+
+# create dev working dir
+cd ~
+mkdir dev
+cd dev
+
+git clone https://github.com/aob3/demo.git
+# login to private repo
+orin.bishop@yahoo.com
+(password)
+
+# work from repo dir - online, on laptop using gitbash, or on vm
+# devloping using a combo of all of the above
+mkir demo
+
+# setup git credentials
+git config user.name "aob"
+git config user.email "orin.bishop@yahoo.com"
+
+# to refesh from repo
+git pull
+
+# to update repo
+git add .
+git commit -m "update docker-compose and add dirs"
+
+# git commit --amend
+# git stash
+git push
+orin.bishop@yahoo.com
+(password)
+##########################################################################################
+
+####### create initial files ##########################################################
+# creating files based on previous experience and online resources
+# see repo and comments in files
+Dockerfile
+docker-compose.yml
+requirements.txt
+##########################################################################################
+
+####### make development directory dir for repo
+# as ec2-user
+cd ~
+mkdir dev
+chmod 775 dev
+cd dev
+
+# download repo: demo
+git clone https://github.com/aob3/demo.git
+# to refesh from repo
+git pull
+
+cd demo
+ls -la
+# base files are there - time to develop python
+
+############ HOLD - set python3 to be default - had some issues - oddities with ec2-ami
+##########################################################################################
+# as root
+sudo su - 
+python --version
+
+# RETUNRS: Python 2.7.18
+# Need to make this python3
+# going to HOLD on this step
+
+which python
+# returns: /usr/bin/python
+ls -la /usr/bin/python*
+
+# returns a symlink from python to python2
+# let's make this python3
+# DO NOT EVER EVER EVER DO THIS !!!!!!!!!!!!!!!
+# remove link
+# rm /usr/bin/python
+# create new link
+# ln -s python python3.7 
+# ls -la python
+
+### DO NOT DO - THIS WILL MESS UP YOUR AMI
+# update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
+# update-alternatives --install /usr/bin/python3 python3 /usr/bin/python
+
+/usr/bin/python
+/usr/bin/python3
+/usr/bin/python3.8
+
+for users: root and ec2-user
+set in ~/.bashrc
+
+alias python3=python3.8
+alias python=python3
+
+##########################################################################################
+##########################################################################################
+
+
+
+####### develop the python app using django web server ######################
+
+# reference: https://www.django-rest-framework.org/tutorial/quickstart/
+
+# as ec2-user (trying to nto run as root where possible) 
+# go to demo dir above with repo files created with 
+# Dockerfile docker-compose.yml requirements
+cd ~/dev/demo
+
+# use from: https://devopsmyway.com/install-django-on-aws-ec2/
+source ~/djangoenv2/bin/activate
+
+
+### HOLD ################################
+# virtual env for making local and isolated 
+python3 -m venv env
+
+# install Django and Django REST framework
+sudo pip3 install django
+########################################
+
+
+### getting env folders setup
+
+# use django-admin to do a quick get setup of the manage python files
+cd ~/dev
+rm -Rf demo
+
+# install again
+sudo pip3 install django
+django --version
+python -m django --version
+
+sudo pip3 install djangorestframework
+django-admin --version
+
+# MUST UPDATE sqlite3
+wget https://kojipkgs.fedoraproject.org//packages/sqlite/3.8.11/1.fc21/x86_64/sqlite-3.8.11-1.fc21.x86_64.rpm
+sudo yum install sqlite-3.8.11-1.fc21.x86_64.rpm
+sqlite3 --version
+
+# setup new project with a single app called: demo
+django-admin startproject demo 
+cd demo
+django-admin manage.py runserver
+
+# Starting development server at http://127.0.0.1:8000/
+
+# http://44.192.80.47:8000
+# http://ec2-44-192-80-47.compute-1.amazonaws.com:8000
+
+# check on network on host
+netstat -pant | grep 8000
+# returns:
+tcp        0      0 127.0.0.1:8000          0.0.0.0:*               LISTEN      2412/python3
+
+
+# Notes on local working vm
+ec2-44-192-80-47.compute-1.amazonaws.com
+ip-172-31-75-202.ec2.internal
+ec2-user
+SampApp01.pem
+
+##### view the django website from browser on local aws-ami #####################
+
+# setup Mate and Chromium web browser
+
+# install local web browser
+https://kennethghartman.com/create-an-ec2-that-runs-chrome-for-sandboxed-websurfing/
+
+sudo yum update -y 
+sudo amazon-linux-extras install mate-desktop1.x 
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm 
+sudo yum install -y ./google-chrome-stable_current_*.rpm
+
+# Install chromium web browser (works faster than chrome since it launches in a new x-window and not in the x-window mate desktop
+# reference: https://aws.amazon.com/premiumsupport/knowledge-center/ec2-linux-2-install-gui/
+sudo amazon-linux-extras install epel
+sudo yum install chromium
+
+# reference: https://houseofbrick.com/configuring-aws-for-x-windows/
+yum install xorg-x11-xauth
+yum install xclock xterm
+
+# refernce: https://aws.amazon.com/premiumsupport/knowledge-center/ec2-linux-2-install-gui/
+sudo amazon-linux-extras install mate-desktop1.x
+sudo bash -c 'echo PREFERRED=/usr/bin/mate-session > /etc/sysconfig/desktop'
+echo "/usr/bin/mate-session" > ~/.Xclients && chmod +x ~/.Xclients
+
+# Note: orin laptop ip:
+192.168.56.1 - current IP
+192.168.56.0/24 - give it range just in case of reboot
+
+# not needed since using MobaXterm
+# export DISPLAY=192.168.56.1:0.0
+
+# FROM AWS CONSOLE: open up inbound port on WebDMX security group
+# https://console.aws.amazon.com/ec2/v2/home?region=us-east-1#SecurityGroups
+# Groip: WebDMZ
+# add custom tcp  0 to 192.168.56.0/24
+
+# from ec2-user
+~/.Xclients
+
+# launched a x-windows desktop
+# in x-window, then click on the pannel and add the classic menu
+# installed here: Chromium installs on MATE under Applications, Internet, Chromium Web Browser.
+http://127.0.0.1:8000 
+# diplayed the django generic page
+
+####################################################################
+
+# continue developmet
+# updated files:
+cd /home/ec2-user/dev/demo
+
+# Dockerfile
+# requirements.txt
+# docker-compose.yml
+
+# start the container
+docker-compose up
+
+# the app started
+
+# in a new terminal checked networking
+netstat -pant | grep 127
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 127.0.0.1:25            0.0.0.0:*               LISTEN      -                              
+tcp        0      0 127.0.0.1:6010          0.0.0.0:*               LISTEN      -                              
+tcp        0      0 127.0.0.1:6011          0.0.0.0:*               LISTEN      -                              
+tcp        0      0 127.0.0.1:33665         0.0.0.0:*               LISTEN      -    
+
+
+# check docker
+netstat -pant | grep 127
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 127.0.0.1:25            0.0.0.0:*               LISTEN      -                              
+tcp        0      0 127.0.0.1:6010          0.0.0.0:*               LISTEN      -                              
+tcp        0      0 127.0.0.1:6011          0.0.0.0:*               LISTEN      -                              
+tcp        0      0 127.0.0.1:33665         0.0.0.0:*               LISTEN      -    
+
+# docker container check 
+docker ps
+
+# retuns:
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+711c7b15ecfe        demo_backend        "/bin/sh -c 'python …"   2 minutes ago       Up 2 minutes        0.0.0.0:8000->8000/tcp   demo_backend_1
+
+# check with x-window chromium
+# generic django website http://127.0.0.1:8000  was successfully
+
+# updated docker-compose.yml with mysql db service
+
+# started app again
+docker-compose up
+
+# checked containers
+docker ps
+# returns
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                NAMES
+10f3649343c4        demo_web            "/bin/sh -c 'python …"   5 minutes ago       Up 5 minutes        0.0.0.0:8000->8000/tcp               demo_web_1
+b547009ed9ef        mysql:8             "docker-entrypoint.s…"   5 minutes ago       Up 5 minutes        33060/tcp, 0.0.0.0:33066->3306/tcp   demo_db_1
+
+
+# note: on docker startup log:
+db_1   | ERROR 1064 (42000) at line 5: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'mysql4fun''' at line 1
+# file: docker-compose.yml: took quotes out of 'user' and 'password' 
+
+# to reset and redo images
+docker system prune -a
+sudo rm -Rf ~/dev/demo/.dbdata/
+
+# DOES NOT WOKR
+mysql -h localhost -u admin -p demodb
+mysql4fun
+
+
+# this works:
+docker-compose exec db mysql -u root -p
+mysql4fun
+
+# log into the container db 
+docker exec -it demo_db_1 bash
+mysql -u root -p 
+mysql4fun
+
+
+# SHOW DATABASES;
+# returns
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| demodb             |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+
+## Add tables to the DB ########################################
+# in a new tecminal session / keeping the docker-compose up running 
+# need a new app in python - will need to use the env setup
+
+# log into the docker container for the web service backend
+docker-compose exec web bash 
+
+# created products app
+python manage.py startapp streaming
+
+
+##################################################
+# edit file: ~/dev/demo/demo/settings.py
+##################################################
+# section: INSTALLED_APPS
+# add:
+'rest_framework',
+'corsheaders',
+'streaming'
+
+
+# section: MIDDLEWARE
+# add:
+'corsheaders.middleware.CorsMiddleware',
+
+# end of file, add a constant
+CORS_ORIGIN_ALLOW_ALL = True
+
+# update for MySQL
+# section: DATABASES
+# update:
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'demodb',
+        'USER': 'root',
+        'PASSWORD': 'mysql4fun',
+        'HOST': 'db',
+        'PORT': '3306',
+    }
+
+
+##################################################
+
+# remove the old sqlite db
+cd ~/dev/demo/
+rm -Rf db.sqlite3
+
+# restart the docker containers
+docker-compose up
+
+
+# update data model for produts (title, image, likes and user)
+##################################################
+# edit file: ~/dev/demo/streaming/models.py
+##################################################
+# add:
+class Songs(models.Model):
+    title = models.CharField(max_length=200)
+    rating = models.PositiveIntegerField(default=0)
+
+
+##################################################
+
+# migrate data
+# log into the docker container for the web service backend
+docker-compose exec web bash 
+
+# create makemigrations
+python manage.py makemigrations
+
+# returns:
+Migrations for 'streaming':
+  streaming/migrations/0001_initial.py
+    - Create model Songs
+
+# run migrations
+python manage.py migrate
+
+# returned:
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, sessions, streaming
+Running migrations:
+  Applying streaming.0001_initial... OK
+
+# review the db
+docker-compose exec db mysql -u root -p
+mysql4fun
+
+use demodb;
+
+mysql> show tables;
++----------------------------+
+| Tables_in_demodb           |
++----------------------------+
+| auth_group                 |
+| auth_group_permissions     |
+| auth_permission            |
+| auth_user                  |
+| auth_user_groups           |
+| auth_user_user_permissions |
+| django_admin_log           |
+| django_content_type        |
+| django_migrations          |
+| django_session             |
+| products_product           |
+| products_user              |
+| streaming_songs            |
++----------------------------+
+13 rows in set (0.00 sec)
+
+
+describe   streaming_songs;
+
+mysql> describe   streaming_songs;
++--------+------------------+------+-----+---------+----------------+
+| Field  | Type             | Null | Key | Default | Extra          |
++--------+------------------+------+-----+---------+----------------+
+| id     | int(11)          | NO   | PRI | NULL    | auto_increment |
+| title  | varchar(200)     | NO   |     | NULL    |                |
+| rating | int(10) unsigned | NO   |     | NULL    |                |
++--------+------------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+
+INSERT INTO streaming_songs (title, rating) VALUES ('Hey Jude', '10'),('All Along The Watchtower', '9') ;
+
+
+mysql> select * from streaming_songs;
++----+--------------------------+--------+
+| id | title                    | rating |
++----+--------------------------+--------+
+|  1 | Hey Jude                 |     10 |
+|  2 | All Along The Watchtower |      9 |
++----+--------------------------+--------+
+2 rows in set (0.00 sec)
+
+######################################################
+BIG FINISH
+######################################################
+# Stop the container
+
+Gracefully stopping... (press Ctrl+C again to force)
+Stopping demo_web_1 ... done
+Stopping demo_db_1  ... done
+
+# db connection is lost
+
+#### What will happen to the data  ??
+
+# start the container
+docker-compose up
+
+# review the db
+docker-compose exec db mysql -u root -p
+mysql4fun
+
+use demodb;
+select * from streaming_songs;
+
+INSERT INTO streaming_songs (title, rating) VALUES ('Smells Like Teen Spirit', '9'),('Another One Rides the Bus', '3') ;
+
+	
+####
+
+
+
+
+Hey Jude
+Good Vibrations
+Respect
+Smells Like Teen Spirit
+Layla
+All Along The Watchtower
+	
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+Question 2:
+A Red Hat Partner is currently using Amazon Web Services for their music streaming app. 
+The application allows users to search for music based on artist, album, or genre, 
+and allows them to create, edit, and share playlists. 
+
+Describe each AWS service listed below and how the Partner would use that service to 
+architect their application. Give as much detail as possible.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Note: Geo Locations:
+
+Regions
+AWS has the concept of a Region, which is a physical location around the world where we cluster data centers. We call each group of logical data centers an Availability Zone. Each AWS Region consists of multiple, isolated, and physically separate AZ's within a geographic area. 
+
+Availability Zones
+An Availability Zone (AZ) is one or more discrete data centers with redundant power, networking, and connectivity in an AWS Region. AZ’s give customers the ability to operate production applications and databases that are more highly available, fault tolerant, and scalable than would be possible from a single data center. All AZ’s in an AWS Region are interconnected with high-bandwidth, low-latency networking, over fully redundant, dedicated metro fiber providing high-throughput, low-latency networking between AZ’s. All traffic between AZ’s is encrypted. 
+
+Edge Locations
+Edge locations are locations maintained by AWS through a worldwide network of data centers for the distribution of content.
+These locations are located in most of the major cities around the world and are used by CloudFront (CDN) to distribute content to end user to reduce latency.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+* EC2
+Amazon Elastic Compute Cloud (Amazon EC2) is a web service that provides secure, resizable compute capacity in the cloud. It is designed to make web-scale cloud computing easier for developers.
+EC2 (Elastic Compute Cloud) — These are just the virtual machines in the cloud on which you have the OS level control. You can run whatever you want in them.
+
+We can call them as Amazon virtual servers. Consider them as a computer where we can host our data. It will be available in different types on the basis of computing, memory, storage, and graphics. AWS EC2 instance is like we are renting a server from AWS on an hourly basis. The two main attractions of EC2 services are the Elastic Load Balancing and Auto Scaling.
+
+Amazon EC2 offers the broadest and deepest compute platform with choice of processor, storage, networking, operating system, and purchase model. We offer the fastest processors in the cloud and we are the only cloud with 400 Gbps ethernet networking. We have the most powerful GPU instances for machine learning training and graphics workloads, as well as the lowest cost-per-inference instances in the cloud. More SAP, HPC, Machine Learning, and Windows workloads run on AWS than any other cloud. Click here to learn What's New with Amazon EC2.
+
+Nearly 400 instances for virtually every business need
+24 regions and 77 availability zones globally
+
+Increase or decrease capacity within minutes, not hours or days
+SLA commitment of 99.99% availability for each Amazon EC2 region. Each region consists of at least 3 availability zones
+The AWS Region/AZ model has been recognized by Gartner as the recommended approach for running enterprise applications that require high availability
+
+
+
+
+* EC2 Autoscaling
+Auto Scaling allows us to scale our Amazon EC2 capacity up or down automatically according to conditions that we define. With Auto Scaling, we can ensure that the number of Amazon EC2 instances we are using increases seamlessly during demand spikes to maintain performance and decreases automatically during demand lulls to minimize costs.
+
+Amazon EC2 Auto Scaling helps you maintain application availability and allows you to automatically add or remove EC2 instances according to conditions you define. You can use the fleet management features of EC2 Auto Scaling to maintain the health and availability of your fleet. You can also use the dynamic and predictive scaling features of EC2 Auto Scaling to add or remove EC2 instances. Dynamic scaling responds to changing demand and predictive scaling automatically schedules the right number of EC2 instances based on predicted demand. Dynamic scaling and predictive scaling can be used together to scale faster. 
+
+Amazon EC2 Auto Scaling to detect impaired Amazon EC2 instances and unhealthy applications, and replace the instances without your intervention. This ensures that your application is getting the compute capacity that you expect. 
+
+
+
+* Elastic Load Balancing
+Elastic load balancing will help us to distribute incoming application traffic across multiple Amazon EC2 instances. For example, if I have too much work to do then I will ask for help from some other person, exactly the same applies here. If a server can’t handle the traffic then we will add a replica of that server and balance the load between them using the load balancer.
+
+Elastic Load Balancing automatically distributes incoming application traffic across multiple targets, such as Amazon EC2 instances, containers, IP addresses, Lambda functions, and virtual appliances. It can handle the varying load of your application traffic in a single Availability Zone or across multiple Availability Zones. Elastic Load Balancing offers four types of load balancers that all feature the high availability, automatic scaling, and robust security necessary to make your applications fault tolerant.
+
+Elastic Load Balancing is part of the AWS network, with native awareness of failure boundaries like AZs to keep your applications available across a region, without requiring Global Server Load Balancing (GSLB). ELB is also a fully managed service, meaning you can focus on delivering applications and not installing fleets of load balancers. Capacity is automatically added and removed based on the utilization of the underlying application servers.
+
+Application Load Balancer
+Network Load Balancer
+Gateway Load Balancer
+
+
+* VPC
+VPC (Virtual Private Cloud) — It is simply a data center in the cloud in which you deploy all your resources. It allows you to better isolate your resources and secure them.
+We can call it as our private network in Cloud. By using AWS VPC we can keep all our aws services under the same network. Also, we will have an additional layer of security for all our AWS services. It is like we are hosting all our AWS services in a single rack.
+Amazon Virtual Private Cloud (Amazon VPC) is a service that lets you launch AWS resources in a logically isolated virtual network that you define. You have complete control over your virtual networking environment, including selection of your own IP address range, creation of subnets, and configuration of route tables and network gateways. You can use both IPv4 and IPv6 for most resources in your virtual private cloud, helping to ensure secure and easy access to resources and applications.
+
+As one of AWS's foundational services, Amazon VPC makes it easy to customize your VPC's network configuration. You can create a public-facing subnet for your web servers that have access to the internet. It also lets you place your backend systems, such as databases or application servers, in a private-facing subnet with no internet access. Amazon VPC lets you to use multiple layers of security, including security groups and network access control lists, to help control access to Amazon EC2 instances in each subnet.
+
+Amazon VPC provides advanced security features that allow you to perform inbound and outbound filtering at the instance and subnet level. Additionally, you can store data in Amazon S3 and restrict access so that it’s only accessible from instances inside your VPC. 
+
+With Amazon VPC's simple set-up, you spend less time setting up, managing, and validating, so you can concentrate on building the applications that run in your VPCs. You can create a VPC easily using the AWS Management Console or Command Line Interface (CLI). 
+
+Host a basic web application, such as a blog or simple website, in a VPC and gain the additional layers of privacy and security afforded by Amazon VPC. You can help secure the website by creating security group rules which allow the web server to respond to inbound HTTP and SSL requests from the internet while simultaneously prohibiting the web server from initiating outbound connections to the internet.
+
+
+
+* Route 53
+It is AWS’s highly available DNS (Domain Name System) service. You can register domain names through it.
+You can call it as AWS DNS. We can use it to buy a domain name and manage its DNS records.
+
+Amazon Route 53 is a highly available and scalable cloud Domain Name System (DNS) web service. It is designed to give developers and businesses an extremely reliable and cost effective way to route end users to Internet applications by translating names like www.example.com into the numeric IP addresses like 192.0.2.1 that computers use to connect to each other. 
+
+Amazon Route 53 effectively connects user requests to infrastructure running in AWS – such as Amazon EC2 instances, Elastic Load Balancing load balancers, or Amazon S3 buckets – and can also be used to route users to infrastructure outside of AWS. You can use Amazon Route 53 to configure DNS health checks to route traffic to healthy endpoints or to independently monitor the health of your application and its endpoints.
+
+
+
+Amazon Route 53 is built using AWS’s highly available and reliable infrastructure. The distributed nature of our DNS servers helps ensure a consistent ability to route your end users to your application. Features such as Amazon Route 53 Traffic Flow help you improve reliability with easy configuration of failover to re-route your users to an alternate location if your primary application endpoint becomes unavailable. A
+
+Using a global anycast network of DNS servers around the world, Amazon Route 53 is designed to automatically route your users to the optimal location depending on network conditions. As a result, the service offers low query latency for your end users, as well as low update latency for your DNS record management needs.
+
+
+
+* S3
+Amazon Simple Storage Service (Amazon S3) is an object storage service that offers industry-leading scalability, data availability, security, and performance.
+We can use this service to store images and other files for websites. We can keep our backups and share files between our AWS services. One of the interesting use this service is for hosting static websites. Also, many of the other AWS services write and read contents from S3.
+
+Amazon Simple Storage Service (Amazon S3) is an object storage service that offers industry-leading scalability, data availability, security, and performance. This means customers of all sizes and industries can use it to store and protect any amount of data for a range of use cases, such as data lakes, websites, mobile applications, backup and restore, archive, enterprise applications, IoT devices, and big data analytics. Amazon S3 provides easy-to-use management features so you can organize your data and configure finely-tuned access controls to meet your specific business, organizational, and compliance requirements. Amazon S3 is designed for 99.999999999% (11 9's) of durability, and stores data for millions of applications for companies all around the world.
+
+Scale your storage resources up and down to meet fluctuating demands, without upfront investments or resource procurement cycles. Amazon S3 is designed for 99.999999999% (11 9’s) of data durability because it automatically creates and stores copies of all S3 objects across multiple systems.
+
+Save costs without sacrificing performance by storing data across the S3 Storage Classes, which support different data access levels at corresponding rates. Y
+
+
+
+
+* CloudFront 
+- Edge Location — They are CDN (Content Delivery Network) endpoints for CloudFront.
+It is AWS’s Content Delivery Network (CDN) that consists of Edge locations that cache resources.
+CloudFront is the CDN service in AWS. AWS has a global network of edge locations and regional edge caches that cache copies of our content close to our website viewers. They ensure that end-user requests are served by the closest edge location. As a result, viewer requests travel a short distance, improving performance for the viewers.
+
+Amazon CloudFront is a fast content delivery network (CDN) service that securely delivers data, videos, applications, and APIs to customers globally with low latency, high transfer speeds, all within a developer-friendly environment.
+
+Global Scaled Network for Fast Content Delivery
+Amazon CloudFront is a highly secure CDN that provides both network and application level protection. 
+
+
+CloudFront is designed to handle your live and on-demand video workloads. Benefit from the globally scaled and performant AWS network, private backbone connectivity to your AWS origins, and integration with AWS and Elemental Media Services. Further optimize your content delivery with default mid-tier caching, Origin Shield architecture, and real-time monitoring. CloudFront supports multiple streaming formats, including Microsoft Smooth, HLS, HDS, or MPEG-DASH, to any device. Additionally, integration with Elemental MediaStore offers low-latency streaming for variety of sports, game streaming use cases. Learn more about CloudFront for Media & Entertainment capabilities.
+
+
+
+
+* DynamoDB
+It is a highly scalable, high-performance NoSQL database. It provides single-digit millisecond latency at any scale.
+Amazon DynamoDB is a key-value and document database that delivers single-digit millisecond performance at any scale. It's a fully managed, multi-region, multi-active, durable database with built-in security, backup and restore, and in-memory caching for internet-scale applications. DynamoDB can handle more than 10 trillion requests per day and can support peaks of more than 20 million requests per second.
+
+Many of the world's fastest growing businesses such as Lyft, Airbnb, and Redfin as well as enterprises such as Samsung, Toyota, and Capital One depend on the scale and performance of DynamoDB to support their mission-critical workloads.
+
+Hundreds of thousands of AWS customers have chosen DynamoDB as their key-value and document database for mobile, web, gaming, ad tech, IoT, and other applications that need low-latency data access at any scale. Create a new table for your application and let DynamoDB handle the rest.
+
+DynamoDB supports some of the world’s largest scale applications by providing consistent, single-digit millisecond response times at any scale. You can build applications with virtually unlimited throughput and storage. DynamoDB global tables replicate your data across multiple AWS Regions to give you fast, local access to data for your globally distributed applications.
+
+DynamoDB is serverless with no servers to provision, patch, or manage and no software to install, maintain, or operate. DynamoDB automatically scales tables up and down to adjust for capacity and maintain performance.
+
+Build powerful web applications that automatically scale up and down. You don't need to maintain servers, and your applications have automated high availability.
+
+
+* Simple Notification Service (SNS)
+(Simple Notification Service) — Can be used to send you notifications in the form of email and SMS regarding your AWS services. It is a push-based service.
+It is like the AWS message service. We can use it to send alerts to mobile devices, emails, ticketing systems etc..
+
+
+
+
+
+
+
+
+ADDITIONAL Services TO NOTE:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Amazon Elastic Transcoder 
+Amazon Elastic Transcoder is a highly scalable, easy to use and cost effective way for developers and businesses to convert (or “transcode”) video and audio files from their source format into versions that will playback on devices like smartphones, tablets and PCs.
+
+Amazon Elastic Transcoder manages all the complexity of running media transcoding in the AWS cloud. Amazon Elastic Transcoder enables you to focus on your content, such as the devices you want to support and the quality levels you want to provide, rather than managing the infrastructure and software needed for conversion.
+
+You can use Amazon Elastic Transcoder to convert video and audio files into supported output formats optimized for playback on desktops, mobile devices, tablets, and televisions. 
+
+has simple pricing: you pay according to the output duration of your content. 
+
+
+
+* ElistiCache
+It’s the cache service offered by AWS. We can host both Redis and Memcache instance in this service.
+It will be same as RDS. Let the AWS tech worry about the server.
+
+Amazon ElastiCache allows you to seamlessly set up, run, and scale popular open-source compatible in-memory data stores in the cloud. Build data-intensive apps or boost the performance of your existing databases by retrieving data from high throughput and low latency in-memory data stores. Amazon ElastiCache is a popular choice for real-time use cases like Caching, Session Stores, Gaming, Geospatial Services, Real-Time Analytics, and Queuing.
+Amazon ElastiCache works as an in-memory data store and cache to support the most demanding applications requiring sub-millisecond response times
+Amazon ElastiCache can scale-out, scale-in, and scale-up to meet fluctuating application demands. Write and memory scaling is supported with sharding. Replicas provide read scaling.
+
+
+
+* Alexa Skills Kit (ASK)
+
+AWS’s serverless technology that allows you to run functions in the cloud. It’s a huge cost saver as you pay only when your functions execute.
+We are using it to run our scripts. Here we do not have to worry about the server where we are running our scripts. It is like we are asking AWS to spin a computer and it’s one and the only purpose will be running our script.
+An Alexa skill has both an interaction model—or voice user interface—and application logic. When a customer speaks, Alexa processes the speech in the context of your interaction model to determine the customer request. Alexa then sends the request to your skill application logic, which acts on it. You provide your application logic as a back-end cloud service hosted by Alexa, AWS, or another server.
+
+
+
+* CloudWatch
+ It can be used to monitor AWS environments like CPU utilization of EC2 and RDS instances and trigger alarms based on different metrics.
+ It will keep track of the stuff that we are doing on AWS control panel. It will update us who is doing what in our AWS panel.
+ 
+ Amazon CloudWatch is a monitoring and observability service built for DevOps engineers, developers, site reliability engineers (SREs), and IT managers. 
+ CloudWatch provides you with data and actionable insights to monitor your applications, respond to system-wide performance changes, optimize resource utilization, and get a unified view of operational health. CloudWatch collects monitoring and operational data in the form of logs, metrics, and events, providing you with a unified view of AWS resources, applications, and services that run on AWS and on-premises servers.
+ 
+
+
+* AWS Cost Explorer
+AWS Cost Explorer has an easy-to-use interface that lets you visualize, understand, and manage your AWS costs and usage over time.
+Get started quickly by creating custom reports that analyze cost and usage data. Analyze your data at a high level (for example, total costs and usage across all accounts) or dive deeper into your cost and usage data to identify trends, pinpoint cost drivers, and detect anomalies.
+
+
+
+* AWS Limitations to Consider:
+
+
+When it comes to AWS, you should not expect a perfect system with a simple setup where everything and everyone is waiting just for you. AWS is a complex infrastructure with its own rules and laws that you should respect and know. Once you are aware of them, your Cloud adventure will be much more comfortable than you ever imagined.
+
+
+AWS service limits are set by the platform. The restrictions are there to:
+Prevent you from spending too much money on your first encounter with the platform
+Protect the system itself from uncontrolled resource usage
+
+
+Lack of relevant knowledge by your team
+If you choose to work with AWS as your Cloud provider, be prepared to learn and invest in your team’s education. As we mentioned before, AWS is an excellent and extensive platform, and you need to know what you’re doing if you want to use it. To be able to take advantage of all the useful features and services offered by AWS, you’ll want to know the platform as deeply as possible.
+To successfully manage your AWS platform, you will need to invest in your team. 
+
+Technical support fee
+When I say that technical support is an AWS limitation, I’m not referring to untrained personnel. I’m referring to the additional costs that dedicated tech support requires.
+
+
+
+
+
+
+
+- Reference links:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+https://blog.usejournal.com/what-is-aws-and-what-can-you-do-with-it-395b585b03c
+https://www.ideaminetech.com/blog/aws-services-in-simple-terms/
+https://aws.amazon.com/products/
+https://cloudacademy.com/blog/5-aws-limitations-to-be-aware-of/
+
+https://docs.aws.amazon.com/whitepapers/latest/aws-overview/media-services.html
+https://www.channele2e.com/channel-partners/csps/cloud-market-share-2020-amazon-aws-microsoft-azure-google-ibm/#:~:text=AWS%20has%20around%2033%25%20cloud,for%2017%25%20of%20the%20market.
+https://docs.aws.amazon.com/whitepapers/latest/aws-overview/introduction.html
+https://www.investopedia.com/articles/investing/011316/what-amazon-web-services-and-why-it-so-successful.asp
+https://aws.amazon.com/what-is-aws/
+https://aws.amazon.com/what-is-cloud-computing/
+
+
+
+
+- Create Arch Diagrams:
+
+BASE Arch Diagram for AWS Streaming:
+https://creately.com/diagram/example/ih1rjlw11/Music%20Streaming%20Service%20Architecture
+
+https://app.creately.com/diagram/gQgGySMlGgz/edit
+
+https://d1.awsstatic.com/case-studies/KKBOX-architecture.584e50361b6b79b0edc912d135ba23bd748875c3.png
+
+https://d1.awsstatic.com/case-studies/apac/tunedglobal2-simple-architecture.8be4a751f34ea2aa35105fe38a51c5ea66fd1de8.jpg
+
+
+- Related Case Studies:
+
+https://aws.amazon.com/solutions/case-studies/soundcloud/
+
+https://aws.amazon.com/solutions/case-studies/kkbox/
+	-  Arch picture:
+	https://d1.awsstatic.com/case-studies/KKBOX-architecture.584e50361b6b79b0edc912d135ba23bd748875c3.png
+	
+https://aws.amazon.com/solutions/case-studies/tuned-global/
+	- Arch picture:
+	https://d1.awsstatic.com/case-studies/apac/tunedglobal2-simple-architecture.8be4a751f34ea2aa35105fe38a51c5ea66fd1de8.jpg
+	
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Amazon Elastic Container Service (Amazon ECS)
+
+Google Kubernetes Engine (GKE)
+
+Helios
+
+
+
