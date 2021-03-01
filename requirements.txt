@@ -1,4 +1,4 @@
-# requirements.txt - defines the python dependencies to be installed by pip
+# requirements.txt - defines the python dependencies to be installed by pip3
 # from https://pypi.org/
 # install django version that is at least version 3 but less than verison as to avoid introduce possible breaks with releases
 Django>=3.1,<3.2

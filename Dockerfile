@@ -1,4 +1,5 @@
-# Dockerfile - used by Docker to build the image by reading instructions
+# Dockerfile - used by Docker to execute commands to setup the enviornment for the container images
+# includes a call to requirements.txt to load needed setup prereqs
 # all the commands a user could call on the command-line to assemble an image
 
 
