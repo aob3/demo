@@ -2,44 +2,36 @@
 # defines and runs multi-container Docker applications to run in in an isolated environment
 
 # docker-compose version 3.0, genrally safe - latest version is 3.8
-version: '3.0'
+version: '3.8'
 services:
-  # define service db
-  db:
-    # pull and use the mysql container
-    image: mysql:8
-    # attach local port 3306 to port 3306 of the container
-    ports:
-      - "3306:3306"
-    # set the db to restart on startup
-    # restart: always
-    environment:
-      - MYSQL_DATABASE='demodb'
-      - MYSQL_USER='user'
-      - MYSQL_PASSWORD='mysql4fun'
-      - MYSQL_ROOT_PASSWORD='mysql4fun'
-      - MYSQL_HOST=''
-    volumes:
-      - ./app:/app
-      - ./db:/var/lib/mysql
-      
-    expose:
-      - "3306"
-
-  # define service web
+  # define service web - this is a backend service
   web:
-    build: .
-    # runs the python script
-    command: python samp-app.py runserver 0.0.0.0:8000
+    build: 
+      # using the current directory
+      context: .
+      # define teh Dockerfile
+      dockerfile: Dockerfile
     # attach local port 8000 to port 8000 of the container
     ports:
       - "8000:8000"
     volumes:
-      - ./app:/app
-      - ./db:/var/lib/mysql
-    # states the start and image pull order (but will not wait)
+      - .:/app
+    # states the start and image pull order - this will run after the db starts
     depends_on:
       - db
-    # expose ports to the host
-    expose:
-      - "8000"
+  db:
+    # pull and use the mysql container - was having issues with v8 so moving back to 5.7
+    image: mysql:5.7
+    # set the db to restart on - if the db stops then the app will fail
+    restart: always
+    # defines the mysql database properties - only stating some basic props
+    # note: had issues with setting MYSQL_PASSWORD (removing) and also setting MYSQL_USER to root
+    environment:
+      MYSQL_DATABASE: demodb
+      MYSQL_ROOT_PASSWORD: mysql4fun
+    # very importnat - map the db data to the local filesystem     
+    volumes:
+      - .dbdata:/var/lib/mysql
+    # mapping port 3306 (default mysql in the container) to the local machine port 33066 (since 3306 is currently being used by mysql server on this vm - may be able to change later)
+    ports:
+      - "3306:3306"

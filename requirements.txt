@@ -1,15 +1,14 @@
 # requirements.txt - defines the python dependencies to be installed by pip
 # from https://pypi.org/
 # install django version that is at least version 3 but less than verison as to avoid introduce possible breaks with releases
-Django>=3.0,<4.0
+Django>=3.1,<3.2
 # insatll djangorestframework - for django restful html calls install the latest version  but not to exceed past a possible breaking version 
 djangorestframework>=3.12.2,<3.20.0
-# install MySQL driver for Python and sets up api usage
-mysql-connector-python>=8.0,<8.1
 # install mysql client
-mysqlclient>=2,<3
-# install Flask - Web Server Gateway Interface for quick web apps
-Flask>=1.1,<1.2
-# install manage.py
-manage.py
-
+mysqlclient>=2.0,<2.2
+# use for django connections to mysql and extra faetures
+django-mysql>=3.0,<4.0
+# handels server resource sharing in django - front end to back end
+django-cors-headers>=3.5,<3.6
+# used for python rabbit mq
+pika>=1.1,<1.2

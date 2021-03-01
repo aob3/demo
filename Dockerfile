@@ -24,19 +24,23 @@ RUN mkdir /app
 WORKDIR /app
 
 # copy the requirements file from our filesystem into the docker image /app dir
-COPY ./requirements.txt /app/
+COPY requirements.txt /app/requirements.txt
 
 # uses the requirements file and installs into the docker image using pip3 (did not symlink pip3 to pip)
-RUN pip3 install -r /app/requirements.txt
+RUN pip3 install -r requirements.txt
 
 # copy the dir on local into the container
-COPY . /app/
+COPY . /app
 
-# create generic 'user' to run the container - make sure the container does not run as root for security purposes
+# create generic 'user' to run the container - make sure the container does not run as root for security purposes - HAD ISSUES
 # RUN adduser -D user
 
-# switch to user
+# switch to user - HAD ISSUES 
 # USER user
 
 # list contents of the directory
 RUN ls -la
+
+# using django to run the app server
+CMD python manage.py runserver 0.0.0.0:8000
+
