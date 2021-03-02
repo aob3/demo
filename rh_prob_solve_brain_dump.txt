@@ -598,17 +598,20 @@ orin.bishop@yahoo.com
 # work from repo dir
 cd demo
 
+# to refesh from repo
+git pull
+
+
+
+# git reference notes ####################################################################
+
 # setup git credentials
 git config user.name "aob"
 git config user.email "orin.bishop@yahoo.com"
 
-# to refesh from repo
-git pull
-
 # to update repo
 git add .
 git commit -m "update all files, demo is ready, docker-compose and add dirs"
-
 # git commit --amend
 # git stash
 git push
@@ -814,7 +817,6 @@ virtualenv djangoenv
 source ~/djangoenv/bin/activate
 pip3 install --upgrade Django==2.*
 python -m django --version
-
 # to exit env
 deactivate
 
@@ -826,7 +828,7 @@ python -m django --version
 # to exit
 deactivate
 
-# this seems to work
+# this seems to ber very nice way to work around all the pyhthon / django dependencies
 
 ################################################################################################
 ################################################################################################
@@ -1086,7 +1088,7 @@ django-admin --version
 
 # MUST UPDATE sqlite3
 wget https://kojipkgs.fedoraproject.org//packages/sqlite/3.8.11/1.fc21/x86_64/sqlite-3.8.11-1.fc21.x86_64.rpm
-sudo yum install sqlite-3.8.11-1.fc21.x86_64.rpm
+sudo yum install sqlite-3.8.11-1.fc21.x86_64.rpm -y
 sqlite3 --version
 
 # setup new project with a single app called: demo

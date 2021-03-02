@@ -40,7 +40,7 @@ http://127.0.0.1:8000
 
 # log into mysql client container
 docker-compose exec db mysql -u root -p
-OR
+# OR
 docker exec -it demo_db_1 bash
 mysql -u root -p 
 
@@ -55,7 +55,6 @@ select * from streaming_songs;
 # cheap way to insert / if more time then setup a pythin script to insert / better: insert through web ui / api call
 INSERT INTO streaming_songs (title, rating) VALUES ('song', '1'),('song', '2') ;
 
-
 # stop container
 cd ~/dev/demo
 
@@ -65,6 +64,7 @@ sudo ls -la /home/ec2-user/dev/demo/.dbdata/demodb/
 # start up containers - in background
 docker-compose up -d
 
+python manage.py startapp streaming
 
 
 ############################################################
@@ -72,6 +72,7 @@ setup on base aws-ami
 ############################################################
 
 - would be nice to see if this worked on ubuntu as well
+- ec2 - choose ami - deafults - Name: SampApp - existing security group: WebDMZ - keypair: SampApp01
 
 # clean vm: SampApp06
 ssh -i "SampApp01.pem" ec2-user@ec2-3-235-242-213.compute-1.amazonaws.com
@@ -103,64 +104,37 @@ git config user.email "orin.bishop@yahoo.com"
 
 ls -la
 
-# switch to root
-sudo su -
-whoami
-cd /home/ec2-user/dev/demo
+# run setup script with sudo 
+sudo ./demo_prep_setup.sh
 
-# run setup script
-./dmeo_prep_setup.sh
-
-# log out
-# log in as ec2-user
+# log out of terminal 
+# log back in as ec2-user
 # try docker
 docker ps
 
 cd ~/dev/demo
-# rename the file: .dbdemo
+
+# may need to rename the file: .dbdemo
 mv .dbdemo.orig
+
+# may need to
+echo "/usr/bin/mate-session" > ~/.Xclients
+chmod +x ~/.Xclients
 
 # run app
 docker-compose up 
 
 
-
-
-###################################################
-# optional - setup django virtual env
-###################################################
-
-sudo yum install python3-pip -y
-pip3 install django
-pip3 freeze
-sudo pip3 install virtualenv
-whereis virtualenv
-cd ~
-virtualenv djangoenv
-# OR /usr/local/bin/virtualenv djangoenv
-
-# creates env in: ~/djangoenv/ .
-source ~/djangoenv/bin/activate
-pip3 install --upgrade Django==2.*
-python -m django --version
-
-# to exit env
-deactivate
-
-
-# create second env - for dev
+# Note: devloped using a setup django virtual env
 source ~/djangoenv2/bin/activate
-pip3 install --upgrade Django
 python -m django --version
-# to exit
-deactivate
-
-###################################################
-###################################################
+python -V
+pip3 -V
 
 
 
-
+### issue that the mysql db: demo exists but the stre
+############################################################
 - ready to start dev
 	
 - new demo vm:

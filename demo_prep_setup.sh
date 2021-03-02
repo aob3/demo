@@ -65,26 +65,44 @@ sudo amazon-linux-extras install mate-desktop1.x -y
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm 
 sudo yum install -y ./google-chrome-stable_current_*.rpm
 
+
 sudo yum install chromium -y
 
 yum install xorg-x11-xauth -y
 yum install xclock xterm -y
 
 sudo bash -c 'echo PREFERRED=/usr/bin/mate-session > /etc/sysconfig/desktop'
-echo "/usr/bin/mate-session" > ~/.Xclients && chmod +x ~/.Xclients
+cat /etc/sysconfig/desktop
+echo "/usr/bin/mate-session" > ~/.Xclients
+chmod +x ~/.Xclients
+
+
+# clean up file
+rm -Rf ~/dev/demo/google-chrome-stable_current_x86_64.rpm
+echo
+
+echo "~~~~~~ listing dir"
+cd ~/dev/demo/
+ls -lsd ~/dev/demo/
+echo
+ls -ltr ~/dev/demo/
+echo
+echo
+ls -la ~/dev/demo/
 
 
 ###################################################
-# optional - setup django virtual env
+# run this as ec2-user
+# echo "~~~~~~ optional - setup django virtual env"
 ###################################################
 
 # sudo yum install python3-pip -y
-# pip3 install django
-# pip3 freeze
+# sudo pip3 install django
+# sudo pip3 freeze
 # sudo pip3 install virtualenv
 # whereis virtualenv
 # cd ~
-# virtualenv djangoenv
+# virtualenv djangoenv2
 # # OR /usr/local/bin/virtualenv djangoenv
 
 # # creates env in: ~/djangoenv/ .
@@ -95,13 +113,27 @@ echo "/usr/bin/mate-session" > ~/.Xclients && chmod +x ~/.Xclients
 # # to exit env
 # # deactivate
 
-
 # # create second env - for dev work
+# virtualenv djangoenv2
 # source ~/djangoenv2/bin/activate
 # pip3 install --upgrade Django
 # python -m django --version
+django --version
+python -m django --version
+
+sudo pip3 install djangorestframework
+django-admin --version
+
+# MUST UPDATE sqlite3
+wget https://kojipkgs.fedoraproject.org//packages/sqlite/3.8.11/1.fc21/x86_64/sqlite-3.8.11-1.fc21.x86_64.rpm
+sudo yum install sqlite-3.8.11-1.fc21.x86_64.rpm -y
+sqlite3 --version
+
 # # to exit
 # # deactivate
+
+#### to get in dev env the run command:
+#### source ~/djangoenv2/bin/activate
 
 ###################################################
 ###################################################
