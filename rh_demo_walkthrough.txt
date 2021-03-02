@@ -1,0 +1,102 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Red Hat - demo
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+#######################################
+demo - walkthrough	
+#######################################
+
+primary dev dmeo vm:	AWS - SampApp05 - ec2-user@ec2-44-192-80-47.compute-1.amazonaws.com
+
+# conect through MobaX terminal
+cd /home/orin/MyDocuments/aob3/education/aws
+ssh -i "SampApp01.pem" ec2-user@ec2-44-192-80-47.compute-1.amazonaws.com
+
+# previously pulled demo repo
+cd ~/dev/demo
+ls -al
+docker-compose up
+# note the logs for the start up for db_1 and web_1
+
+# review
+docker ps
+docker ps -a
+
+# local networking
+netstat -pant | grep  8000
+netstat -pant | grep  127
+
+# view local website
+~/.Xclients
+
+# launch browser: Aplications > Internet > chromium
+# pull chromiun window to screen share window
+http://127.0.0.1:8000 
+# diplayed the django generic page
+
+
+# log into mysql client container
+docker-compose exec db mysql -u root -p
+OR
+docker exec -it demo_db_1 bash
+mysql -u root -p 
+
+mysql4fun
+
+show databases;
+use demodb;
+show tables;
+
+select * from streaming_songs;
+
+# cheap way to insert / if more time then setup a pythin script to insert / better: insert through web ui / api call
+INSERT INTO streaming_songs (title, rating) VALUES ('song', '1'),('song', '2') ;
+
+
+# stop container
+cd ~/dev/demo
+
+# show db tables still persist
+sudo ls -la /home/ec2-user/dev/demo/.dbdata/demodb/
+
+# start up containers - in background
+docker-compose up -d
+
+
+
+
+
+- ready to start dev
+	
+- new demo vm:
+	- basic setup 
+	- download repo
+	- start up
+		docker-compose up
+		docker-compose up -d 
+		
+	- review: containers
+	
+	- view website - generic
+		
+	- view db
+	- write to db
+	- review db
+	- stop containers
+	- review db location
+	- start containers
+	- review db
+
+- port to new ami
+	- 
+
+- run with -d
+
+- py script to update db
+
+- reference: https://www.django-rest-framework.org/tutorial/quickstart/
+
+

@@ -766,8 +766,9 @@ services:
 ############################################################################################################
 ############################################################################################################
 ############################################################################################################
-cutting losses with podman / podman-compose
+Rework demo / dev
 setup a new AWS-EC2-AMI
+cutting losses with podman / podman-compose
 ############################################################################################################
 ############################################################################################################
 ############################################################################################################
@@ -1048,8 +1049,6 @@ alias python=python3
 ##########################################################################################
 ##########################################################################################
 
-
-
 ####### develop the python app using django web server ######################
 
 # reference: https://www.django-rest-framework.org/tutorial/quickstart/
@@ -1073,7 +1072,6 @@ sudo pip3 install django
 
 
 ### getting env folders setup
-
 # use django-admin to do a quick get setup of the manage python files
 cd ~/dev
 rm -Rf demo
@@ -1114,11 +1112,10 @@ ec2-user
 SampApp01.pem
 
 ##### view the django website from browser on local aws-ami #####################
-
 # setup Mate and Chromium web browser
 
 # install local web browser
-https://kennethghartman.com/create-an-ec2-that-runs-chrome-for-sandboxed-websurfing/
+# reference: https://kennethghartman.com/create-an-ec2-that-runs-chrome-for-sandboxed-websurfing/
 
 sudo yum update -y 
 sudo amazon-linux-extras install mate-desktop1.x 
@@ -1164,7 +1161,7 @@ http://127.0.0.1:8000
 
 # continue developmet
 # updated files:
-cd /home/ec2-user/dev/demo
+cd ~/dev/demo
 
 # Dockerfile
 # requirements.txt
@@ -1421,10 +1418,7 @@ select * from streaming_songs;
 INSERT INTO streaming_songs (title, rating) VALUES ('Smells Like Teen Spirit', '9'),('Another One Rides the Bus', '3') ;
 
 	
-####
-
-
-
+#### Sample songs:
 
 Hey Jude
 Good Vibrations
@@ -1432,6 +1426,29 @@ Respect
 Smells Like Teen Spirit
 Layla
 All Along The Watchtower
+
+
+############################################################
+demo_prep_env.sh
+############################################################
+
+# run as root
+
+
+
+################################################################################
+Revisting - sample django app: probably better on a new vm
+################################################################################
+
+- launch new vm
+- From generic django url go the idea on 3/2
+https://docs.djangoproject.com/en/3.1/intro/tutorial01/
+
+
+
+
+
+
 	
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1706,10 +1723,11 @@ https://aws.amazon.com/solutions/case-studies/tuned-global/
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Amazon Elastic Container Service (Amazon ECS)
-
 Google Kubernetes Engine (GKE)
-
 Helios
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 
 
