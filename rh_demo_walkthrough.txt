@@ -67,6 +67,18 @@ docker-compose up -d
 
 
 
+############################################################
+setup on base aws-ami
+############################################################
+
+- would be nice to see if this worked on ubuntu as well
+
+# clean vm: SampApp06
+ssh -i "SampApp01.pem" ec2-user@ec2-3-235-242-213.compute-1.amazonaws.com
+
+# clean vm: SampApp08
+ssh -i "SampApp01.pem" ec2-user@ec2-34-229-161-168.compute-1.amazonaws.com
+
 ###### setup on new aws-ec2-ami
 # create free tier aws ami
 # login as ec2-user
@@ -79,15 +91,16 @@ sudo yum install git -y
 cd ~
 mkdir dev
 cd dev
-
-# setup git credentials
-git config user.name "aob"
-git config user.email "orin.bishop@yahoo.com"
+pwd
 
 # download repo demo
 git clone https://github.com/aob3/demo.git
 
-cd demo 
+cd demo
+# setup git credentials
+git config user.name "aob"
+git config user.email "orin.bishop@yahoo.com"
+
 ls -la
 
 # switch to root

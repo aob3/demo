@@ -1,52 +1,77 @@
 #!/bin/bash
 
-echo "demo prep ec2-ami"
-echo "run as user: root"
-
+echo
+echo
+echo "~~~~~~demo prep ec2-ami"
+date
+echo
+echo "~~~~~~ as user: root"
+# not forcing off if not root
 echo "whoami: " `whoami`
 
+echo
+echo "~~~~~~ always good to do a yum update"
 yum update -y
-yum install git -y
 
-yum install -y gcc openssl-devel bzip2-devel libffi-devel
+git --version 
+# git should be installed
+# yum install git -y
+
+
+echo
+echo "~~~~~~ setup extras needed for other tools"
+echo
+yum install -y gcc openssl-devel bzip2-devel libffi-devel 
 sudo amazon-linux-extras install epel -y
 
-
+echo
+echo "~~~~~~ echeck python"
+echo
 python --version
-
+echo
+echo "~~~~~~ setup mysql client"
+echo
 echo "mysql client not needed - but is nice"
 
 yum install mysql -y
 
 mysql --version
+echo
+echo "~~~~~~ setup docker"
+echo
 
 sudo amazon-linux-extras install docker -y
 
 sudo usermod -a -G docker ec2-user
-
 
 sudo curl -L "https://github.com/docker/compose/releases/download/1.28.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
 sudo chmod +x /usr/local/bin/docker-compose
 
 sudo systemctl enable docker
+
 sudo systemctl start docker
 
+echo
+echo
+docker ps
 
-sudo amazon-linux-extras install mate-desktop1.x 
+echo
+
+echo
+echo "~~~~~~ setup vm desktop and web browser"
+echo
+sudo amazon-linux-extras install mate-desktop1.x -y
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm 
 sudo yum install -y ./google-chrome-stable_current_*.rpm
 
-sudo amazon-linux-extras install epel
-sudo yum install chromium
+sudo yum install chromium -y
 
-yum install xorg-x11-xauth
-yum install xclock xterm
+yum install xorg-x11-xauth -y
+yum install xclock xterm -y
 
-sudo amazon-linux-extras install mate-desktop1.x
 sudo bash -c 'echo PREFERRED=/usr/bin/mate-session > /etc/sysconfig/desktop'
 echo "/usr/bin/mate-session" > ~/.Xclients && chmod +x ~/.Xclients
-
 
 
 ###################################################
