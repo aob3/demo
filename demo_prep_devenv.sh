@@ -19,7 +19,7 @@ sudo pip3 install virtualenv
 whereis virtualenv
 cd ~
 virtualenv djangoenv2
-# # OR /usr/local/bin/virtualenv djangoenv
+# OR /usr/local/bin/virtualenv djangoenv
 
 # creates env in: ~/djangoenv/ .
 source ~/djangoenv/bin/activate
