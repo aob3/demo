@@ -67,6 +67,85 @@ docker-compose up -d
 
 
 
+###### setup on new aws-ec2-ami
+# create free tier aws ami
+# login as ec2-user
+whoami
+
+# get git
+sudo yum install git -y
+
+# create dev working dir
+cd ~
+mkdir dev
+cd dev
+
+# setup git credentials
+git config user.name "aob"
+git config user.email "orin.bishop@yahoo.com"
+
+# download repo demo
+git clone https://github.com/aob3/demo.git
+
+cd demo 
+ls -la
+
+# switch to root
+sudo su -
+whoami
+cd /home/ec2-user/dev/demo
+
+# run setup script
+./dmeo_prep_setup.sh
+
+# log out
+# log in as ec2-user
+# try docker
+docker ps
+
+cd ~/dev/demo
+# rename the file: .dbdemo
+mv .dbdemo.orig
+
+# run app
+docker-compose up 
+
+
+
+
+###################################################
+# optional - setup django virtual env
+###################################################
+
+sudo yum install python3-pip -y
+pip3 install django
+pip3 freeze
+sudo pip3 install virtualenv
+whereis virtualenv
+cd ~
+virtualenv djangoenv
+# OR /usr/local/bin/virtualenv djangoenv
+
+# creates env in: ~/djangoenv/ .
+source ~/djangoenv/bin/activate
+pip3 install --upgrade Django==2.*
+python -m django --version
+
+# to exit env
+deactivate
+
+
+# create second env - for dev
+source ~/djangoenv2/bin/activate
+pip3 install --upgrade Django
+python -m django --version
+# to exit
+deactivate
+
+###################################################
+###################################################
+
+
 
 
 - ready to start dev
