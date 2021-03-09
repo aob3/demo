@@ -39,10 +39,6 @@ pwd
 git clone https://github.com/aob3/demo.git
 
 cd demo
-# setup git credentials
-git config user.name "aob"
-git config user.email "orin.bishop@yahoo.com"
-
 ls -la
 
 # run setup script with sudo 
@@ -53,9 +49,20 @@ sudo ./demo_prep_setup.sh
 # try docker
 docker ps
 
+# run python env setup
+# as: es2-user
+sudo ./demo_prep_setup.sh
+
 cd ~/dev/demo
+./demo_prep_devenv.sh
+
 
 # run app
 docker-compose up -d
+
+# may need to
+echo "/usr/bin/mate-session" > ~/.Xclients
+chmod +x ~/.Xclients
+
 
 ```
